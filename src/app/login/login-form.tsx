@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -73,10 +74,12 @@ export function LoginForm() {
             Remember me
           </Label>
         </div>
-        {/* Forgot-password flow is UI-only for v1 — see PRD §11 */}
-        <a href="#" className="text-sm text-primary underline-offset-4 hover:underline">
+        <Link
+          href="/login/forgot-password"
+          className="text-sm text-primary underline-offset-4 hover:underline"
+        >
           Forgot password?
-        </a>
+        </Link>
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" className="w-full" disabled={loading}>

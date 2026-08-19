@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Plus } from "lucide-react";
+import { Plus, List, LayoutGrid } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { TableToolbar, type TableFilter } from "@/components/table-toolbar";
 import { SortableHeader } from "@/components/sortable-header";
 import { DataPagination } from "@/components/data-pagination";
-import { ViewToggle } from "@/components/products/view-toggle";
+import { ViewToggle } from "@/components/view-toggle";
 import { ProductFormDialog } from "@/components/products/product-form-dialog";
 import { ProductRowActions } from "@/components/products/product-row-actions";
 import { formatCurrency } from "@/lib/format";
@@ -82,7 +82,14 @@ export default async function ProductsPage({
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <TableToolbar searchPlaceholder="Search by name" filters={filters} />
-        <ViewToggle view={view} buildHref={(v) => buildHref({ view: v === "list" ? null : v })} />
+        <ViewToggle
+          value={view}
+          options={[
+            { value: "list", icon: List, label: "List view" },
+            { value: "grid", icon: LayoutGrid, label: "Grid view" },
+          ]}
+          buildHref={(v) => buildHref({ view: v === "list" ? null : v })}
+        />
       </div>
 
       {view === "grid" ? (

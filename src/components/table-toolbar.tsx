@@ -12,12 +12,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+export type TableFilter = {
+  param: string;
+  placeholder: string;
+  allLabel: string;
+  options: { value: string; label: string }[];
+};
+
 export function TableToolbar({
   searchPlaceholder,
   statusOptions,
+  filters,
 }: {
   searchPlaceholder: string;
+  /** Shorthand for a single "status" filter — kept for simpler call sites. */
   statusOptions?: string[];
+  /** One or more arbitrary filters (e.g. status, category). */
+  filters?: TableFilter[];
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -50,6 +61,19 @@ export function TableToolbar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  const allFilters: TableFilter[] = filters ?? (
+    statusOptions
+      ? [
+          {
+            param: "status",
+            placeholder: "Status",
+            allLabel: "All statuses",
+            options: statusOptions.map((s) => ({ value: s, label: s })),
+          },
+        ]
+      : []
+  );
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <div className="relative max-w-xs flex-1">
@@ -61,26 +85,27 @@ export function TableToolbar({
           className="pl-8"
         />
       </div>
-      {statusOptions && (
+      {allFilters.map((filter) => (
         <Select
-          value={searchParams.get("status") ?? "all"}
+          key={filter.param}
+          value={searchParams.get(filter.param) ?? "all"}
           onValueChange={(value) =>
-            updateParam("status", value === "all" ? null : value)
+            updateParam(filter.param, value === "all" ? null : value)
           }
         >
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Status" />
+            <SelectValue placeholder={filter.placeholder} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {statusOptions.map((status) => (
-              <SelectItem key={status} value={status}>
-                {status}
+            <SelectItem value="all">{filter.allLabel}</SelectItem>
+            {filter.options.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-      )}
+      ))}
     </div>
   );
 }

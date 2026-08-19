@@ -14,7 +14,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { TableToolbar } from "@/components/table-toolbar";
 import { SortableHeader } from "@/components/sortable-header";
 import { DataPagination } from "@/components/data-pagination";
-import { OrderRowActions } from "@/components/order-row-actions";
+import { RowActions } from "@/components/row-actions";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { getOrdersPage, ORDER_STATUSES } from "./queries";
 
@@ -146,7 +146,7 @@ export default async function OrdersPage({
                   {formatDate(order.createdAt)}
                 </TableCell>
                 <TableCell className="text-right">
-                  <OrderRowActions orderId={order.id} />
+                  <RowActions href={`/orders/${order.id}`} />
                 </TableCell>
               </TableRow>
             ))}

@@ -13,18 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { InitialsAvatar } from "@/components/initials-avatar";
 import { authClient } from "@/lib/auth-client";
 
 export function TopBar({ userName }: { userName: string }) {
   const router = useRouter();
-
-  const initials = userName
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-4 border-b bg-background px-4">
@@ -42,9 +35,7 @@ export function TopBar({ userName }: { userName: string }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              <Avatar className="size-8">
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
+              <InitialsAvatar name={userName} />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

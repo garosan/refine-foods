@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createStore, updateStore, type StoreInput } from "@/app/(app)/stores/actions";
-import { STORE_STATUSES } from "@/app/(app)/stores/queries";
+import { STORE_STATUSES } from "@/app/(app)/stores/constants";
 
 type Store = {
   id: string;

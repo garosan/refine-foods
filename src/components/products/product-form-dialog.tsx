@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createProduct, updateProduct, type ProductInput } from "@/app/(app)/products/actions";
-import { PRODUCT_STATUSES } from "@/app/(app)/products/queries";
+import { PRODUCT_STATUSES } from "@/app/(app)/products/constants";
 
 type Category = { id: string; title: string };
 

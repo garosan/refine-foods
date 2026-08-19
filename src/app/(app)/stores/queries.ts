@@ -1,8 +1,9 @@
 import { and, asc, eq, ilike, or } from "drizzle-orm";
 import { db } from "@/db";
 import { stores } from "@/db/schema";
+import { STORE_STATUSES } from "./constants";
 
-export const STORE_STATUSES = ["Open", "Closed"] as const;
+export { STORE_STATUSES };
 
 export type StoresQuery = {
   status?: string;

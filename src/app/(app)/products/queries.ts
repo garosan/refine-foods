@@ -1,8 +1,9 @@
 import { and, asc, count, desc, eq, ilike } from "drizzle-orm";
 import { db } from "@/db";
 import { products, categories } from "@/db/schema";
+import { PRODUCT_STATUSES } from "./constants";
 
-export const PRODUCT_STATUSES = ["Available", "Unavailable"] as const;
+export { PRODUCT_STATUSES };
 
 export const PAGE_SIZE = 10;
 

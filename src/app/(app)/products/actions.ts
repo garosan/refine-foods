@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { products } from "@/db/schema";
+import { nextSequentialId } from "@/db/next-id";
 import { PRODUCT_STATUSES } from "./queries";
 
 export type ProductInput = {
@@ -14,10 +15,6 @@ export type ProductInput = {
   imageUrl: string;
   status: string;
 };
-
-function nextId() {
-  return `prod_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-}
 
 function validate(input: ProductInput) {
   if (!input.name.trim()) throw new Error("Name is required");
@@ -33,13 +30,15 @@ function validate(input: ProductInput) {
 export async function createProduct(input: ProductInput) {
   validate(input);
 
+  const id = await nextSequentialId(products, products.id, "prod");
+
   await db.insert(products).values({
-    id: nextId(),
+    id,
     name: input.name.trim(),
     description: input.description.trim(),
     price: input.price,
     categoryId: input.categoryId,
-    imageUrl: input.imageUrl.trim() || `https://picsum.photos/seed/${nextId()}/400/300`,
+    imageUrl: input.imageUrl.trim() || `https://picsum.photos/seed/${id}/400/300`,
     status: input.status as (typeof PRODUCT_STATUSES)[number],
   });
 

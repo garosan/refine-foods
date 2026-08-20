@@ -4,15 +4,12 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { categories } from "@/db/schema";
+import { nextSequentialId } from "@/db/next-id";
 
 export type CategoryInput = {
   title: string;
   icon: string;
 };
-
-function nextId() {
-  return `cat_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-}
 
 function validate(input: CategoryInput) {
   if (!input.title.trim()) throw new Error("Title is required");
@@ -22,8 +19,10 @@ function validate(input: CategoryInput) {
 export async function createCategory(input: CategoryInput) {
   validate(input);
 
+  const id = await nextSequentialId(categories, categories.id, "cat");
+
   await db.insert(categories).values({
-    id: nextId(),
+    id,
     title: input.title.trim(),
     icon: input.icon.trim(),
     status: "Visible",

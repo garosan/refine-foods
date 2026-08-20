@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { stores } from "@/db/schema";
+import { nextSequentialId } from "@/db/next-id";
 import { mockGeocode } from "@/lib/maps";
 import { STORE_STATUSES } from "./queries";
 
@@ -14,10 +15,6 @@ export type StoreInput = {
   address: string;
   status: string;
 };
-
-function nextId() {
-  return `store_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-}
 
 function validate(input: StoreInput) {
   if (!input.title.trim()) throw new Error("Title is required");
@@ -31,9 +28,10 @@ export async function createStore(input: StoreInput) {
   validate(input);
 
   const { lat, lng } = mockGeocode(input.address);
+  const id = await nextSequentialId(stores, stores.id, "store");
 
   await db.insert(stores).values({
-    id: nextId(),
+    id,
     title: input.title.trim(),
     email: input.email.trim(),
     phone: input.phone.trim(),

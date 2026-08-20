@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { couriers } from "@/db/schema";
+import { nextSequentialId } from "@/db/next-id";
 import { COURIER_STATUSES } from "./constants";
 
 export type CourierInput = {
@@ -13,10 +14,6 @@ export type CourierInput = {
   storeId: string;
   status: string;
 };
-
-function nextId() {
-  return `cour_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-}
 
 function validate(input: CourierInput) {
   if (!input.name.trim()) throw new Error("Name is required");
@@ -30,8 +27,10 @@ function validate(input: CourierInput) {
 export async function createCourier(input: CourierInput) {
   validate(input);
 
+  const id = await nextSequentialId(couriers, couriers.id, "cour");
+
   await db.insert(couriers).values({
-    id: nextId(),
+    id,
     name: input.name.trim(),
     vehicleId: input.vehicleId.trim(),
     phone: input.phone.trim(),
